@@ -24,7 +24,9 @@ class ViewController: UIViewController {
             swifter = Swifter(consumerKey: secrets.APIKey, consumerSecret: secrets.APISecret)
         }
         // we get just 15 tweets back, default count is 15 maximum is 100 (more tweets we have to perform this search more than onde increasing the date range or use premium plans
-        swifter?.searchTweet(using: "@Apple", count: 100, success: { results, metadata in
+        // lang - just tweets on specific language
+        // extended mode - to see full text
+        swifter?.searchTweet(using: "@Apple", lang: "en", count: 100, tweetMode: .extended, success: { results, metadata in
             print(results)
         }, failure: { error in
             print("There was an error with Twitter API request, \(error)")
