@@ -5,6 +5,7 @@
 
 import UIKit
 import SwifteriOS
+import CoreML
 
 class ViewController: UIViewController {
     
@@ -13,6 +14,16 @@ class ViewController: UIViewController {
     @IBOutlet weak var sentimentLabel: UILabel!
     
     var swifter: Swifter?
+    
+    let model: TweetSentimentClassifier = {
+        do {
+            let config = MLModelConfiguration()
+            return try TweetSentimentClassifier(configuration: config)
+        } catch {
+            print(error)
+            fatalError("Couldn't create TweetSentimentClassifier")
+        }
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,10 +38,14 @@ class ViewController: UIViewController {
         // lang - just tweets on specific language
         // extended mode - to see full text
         swifter?.searchTweet(using: "@Apple", lang: "en", count: 100, tweetMode: .extended, success: { results, metadata in
-            print(results)
+            //print(results)
         }, failure: { error in
             print("There was an error with Twitter API request, \(error)")
         })
+ 
+        let prediction = try! model.prediction(text: "@Apple is the best company.")
+        print(prediction.label)
+
 
     }
 
